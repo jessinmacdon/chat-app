@@ -1,33 +1,81 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import {
+    StyleSheet,
+    View,
+    Platform,
+    /*Text,*/
+    KeyboardAvoidingView
+} from 'react-native';
 
 export default function Chat(props) {
-    //display users name and background color from start screen
     let { name, color } = props.route.params;
+    const [messages, setMessages] = useState([]);
+
+    //display users name and background color from start screen
     useEffect(() => {
         props.navigation.setOptions({ title: name });
-    }, []);
+        setMessages([
+            {
+                _id: 1,
+                text: 'Hello developer',
+                createdAt: new Date(),
+                user: {
+                    _id: 2,
+                    name: 'React Native',
+                    avatar: 'https://placeimg.com/140/140/any',
+                },
+            },
+            {
+                _id: 2,
+                text: `${name} has joined the chat.`,
+                createdAt: new Date(),
+                system: true,
+                // pass additional custom parameters if any
+            },
+        ]);
+    }, [])
+
+    const onSend = useCallback((messages = []) => {
+        setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
+    }, [])
+
+    // implement and customize the colour of users bubble
+    const renderBubble = (props) => {
+        return (
+            <Bubble
+                {...props}
+                wrapperStyle={{
+                    right: {
+                        backgroundColor: '#000'
+                    }
+                }}
+            />
+        )
+    }
+
 
     return (
-        // Components to create the color arrays, titles and the app's colors
         <View style={[{ backgroundColor: color }, styles.container]}>
-            <Text style={styles.text}>This will be your chat screen! Updating.....</Text>
-            <Text style={styles.text}>Chat room will be ready in 2 days</Text>
+            <GiftedChat
+                renderBubble={renderBubble.bind()}
+                messages={messages}
+                onSend={messages => onSend(messages)}
+                user={{
+                    _id: 1,
+                }}
+            />
+
+            {/* Fixing Androids kexboard problem - messages shouldn't be covered/hidden by kexboard when typiing */}
+            {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
         </View>
     )
 }
 
-// Creating stylesheet for the start screen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
 
-    text: {
-        color: '#ffffff',
-        fontSize: 16,
-        fontWeight: '400',
-    },
-});
+})
+
