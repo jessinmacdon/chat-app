@@ -4,41 +4,74 @@ import {
     StyleSheet,
     View,
     Platform,
-    /*Text,*/
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    /*Text*/
 } from 'react-native';
 
+import {
+    collection,
+    onSnapshot,
+    addDoc,
+    query,
+    orderBy
+} from "firebase/firestore";
+
+import { auth, db } from '../config/firebase';
+
+
 export default function Chat(props) {
+    // Retrieving the name and color properties passed from the Start Screen
     let { name, color } = props.route.params;
+
+    // State - hold messages
     const [messages, setMessages] = useState([]);
 
-    //display users name and background color from start screen
+    // Create reference to the messages collection on firestore
+    const messagesRef = collection(db, 'messages');
+
     useEffect(() => {
+        //display users name from start screen as title on chat screen
         props.navigation.setOptions({ title: name });
-        setMessages([
-            {
-                _id: 1,
-                text: 'Hello developer',
-                createdAt: new Date(),
-                user: {
-                    _id: 2,
-                    name: 'React Native',
-                    avatar: 'https://placeimg.com/140/140/any',
-                },
-            },
-            {
-                _id: 2,
-                text: `${name} has joined the chat.`,
-                createdAt: new Date(),
-                system: true,
-                // pass additional custom parameters if any
-            },
-        ]);
+
+        // messages to be stored by createdAt(Date/time of creation
+        //Query messages collection - pulling all messages
+        const messagesQuery = query(messagesRef, orderBy("createdAt", "desc"));
+
+        // onSnapshot returns an unsubscriber, listening for updates to the messages collection
+        const unsubscribe = onSnapshot(messagesQuery, onCollectionUpdate);
+
+        // unsubsribe snapshot listener on unmount
+        return () => unsubscribe();
+    }, []);
+
+
+    // save last messages(state) to the Firestore messages collection
+    const addMessage = (message) => {
+        addDoc(messagesRef, {
+            _id: message._id,
+            text: message.text || '',
+            createdAt: message.createdAt,
+            user: message.user
+        });
+    }
+
+    // Appending the new message to state - //then call addMessage to save to Firebase collection
+    const onSend = useCallback((messages = []) => {
+        setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
+        addMessage(messages[0]);
     }, [])
 
-    const onSend = useCallback((messages = []) => {
-        setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-    }, [])
+    // Reading snapshot of messages collection then adding messages to messages state
+    const onCollectionUpdate = (querySnapshot) => {
+        setMessages(
+            querySnapshot.docs.map(doc => ({
+                _id: doc.data()._id,
+                createdAt: doc.data().createdAt.toDate(),
+                text: doc.data().text,
+                user: doc.data().user
+            }))
+        )
+    }
 
     // implement and customize the colour of users bubble
     const renderBubble = (props) => {
@@ -56,17 +89,24 @@ export default function Chat(props) {
 
 
     return (
-        <View style={[{ backgroundColor: color }, styles.container]}>
+        //display users name and background color from start screen
+        <View
+            style={[{ backgroundColor: color }, styles.container]}
+        >
             <GiftedChat
                 renderBubble={renderBubble.bind()}
                 messages={messages}
+                showAvatarForEveryMessage={true}
                 onSend={messages => onSend(messages)}
+                // pull uid from auth data object and name from start.js/start screen - tehn add to message
                 user={{
-                    _id: 1,
+                    _id: auth?.currentUser?.uid,
+                    name: name,
+                    avatar: 'https://placeimg.com/140/140/any'
                 }}
             />
 
-            {/* Fixing Androids kexboard problem - messages shouldn't be covered/hidden by kexboard when typiing */}
+            {/* Fixing Android's keyboard problem - messages shouldn't be covered/hidden by keyboard when typing */}
             {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
         </View>
     )
@@ -76,6 +116,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-
 })
+
+
+
+
+
+
+
+
 
