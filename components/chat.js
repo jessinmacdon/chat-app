@@ -16,7 +16,7 @@ import {
     orderBy
 } from "firebase/firestore";
 
-import { auth, db } from '../config/firebase';
+import { auth, db, signInAnon } from '../config/firebase';
 
 
 export default function Chat(props) {
@@ -30,6 +30,9 @@ export default function Chat(props) {
     const messagesRef = collection(db, 'messages');
 
     useEffect(() => {
+        // Signing in as Anonymous user
+        signInAnon(auth);
+
         //display users name from start screen as title on chat screen
         props.navigation.setOptions({ title: name });
 
@@ -43,7 +46,6 @@ export default function Chat(props) {
         // unsubsribe snapshot listener on unmount
         return () => unsubscribe();
     }, []);
-
 
     // save last messages(state) to the Firestore messages collection
     const addMessage = (message) => {
@@ -98,7 +100,7 @@ export default function Chat(props) {
                 messages={messages}
                 showAvatarForEveryMessage={true}
                 onSend={messages => onSend(messages)}
-                // pull uid from auth data object and name from start.js/start screen - tehn add to message
+                // pull uid from auth data object and name from start.js/start screen - then add to message
                 user={{
                     _id: auth?.currentUser?.uid,
                     name: name,
