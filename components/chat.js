@@ -102,7 +102,7 @@ export default function Chat(props) {
                 onSend={messages => onSend(messages)}
                 // pull uid from auth data object and name from start.js/start screen - then add to message
                 user={{
-                    _id: auth.currentUser?.uid,
+                    _id: auth.currentUser.uid,
                     name: name,
                     avatar: 'https://placeimg.com/140/140/any'
                 }}
