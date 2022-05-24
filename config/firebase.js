@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, signInAnonymously } from "firebase/auth";
 
 import Constants from "expo-constants";
 
@@ -23,3 +23,15 @@ export const db = getFirestore(app);
 
 // Get a reference to the Firebase auth object
 export const auth = getAuth();
+
+export const signInAnon = (auth) => {
+    signInAnonymously(auth)
+        .then(() => {
+            console.log("YES")
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(error)
+        });
+}

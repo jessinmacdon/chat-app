@@ -4,7 +4,7 @@ import { StyleSheet, View, Platform, KeyboardAvoidingView, Text } from 'react-na
 
 import { collection, onSnapshot, addDoc, query, orderBy } from "firebase/firestore";
 
-import { auth, db } from '../config/firebase';
+import { auth, db, signInAnon } from '../config/firebase';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
@@ -60,6 +60,9 @@ export default function Chat(props) {
     }
 
     useEffect(() => {
+        // Signing in as Anonymous user
+        signInAnon(auth);
+
         // Set the screen title to the user name entered in the start screen
         props.navigation.setOptions({ title: name });
 
@@ -98,7 +101,7 @@ export default function Chat(props) {
     }, [isConnected]);
 
 
-    // Add the last message of the messages state to the Firestore messages collection
+    // save last messages(state) to the Firestore messages collection
     const addMessage = (message) => {
         addDoc(messagesRef, {
             _id: message._id,
@@ -168,9 +171,9 @@ export default function Chat(props) {
                 messages={messages}
                 showAvatarForEveryMessage={true}
                 onSend={messages => onSend(messages)}
-                // Add user data to message, using name provided in start screen and uid from auth object
+                // pull uid from auth data object and name from start.js/start screen - then add to message
                 user={{
-                    _id: auth?.currentUser?.uid,
+                    _id: auth.currentUser.uid,
                     name: name,
                     avatar: 'https://placeimg.com/140/140/any'
                 }}
