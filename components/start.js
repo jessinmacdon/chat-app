@@ -11,7 +11,7 @@ const colors = {
 };
 
 export default function Start(props) {
-    let [name, setName] = useState();
+    let [name, setName] = useState('');
     let [color, setColor] = useState();
 
     return (

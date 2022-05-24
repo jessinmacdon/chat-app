@@ -31,6 +31,7 @@ export default function Chat(props) {
     const saveMessages = async () => {
         try {
             await AsyncStorage.setItem('messages', JSON.stringify(messages));
+            console.log('messages have been logged', messages)
         }
         catch (error) {
             console.log(error.message);
@@ -43,6 +44,7 @@ export default function Chat(props) {
         try {
             messages = await AsyncStorage.getItem('messages') || [];
             setMessages(JSON.parse(messages));
+            console.log('see your messages', messages)
         }
         catch (error) {
             console.log(error.message);
@@ -59,6 +61,23 @@ export default function Chat(props) {
         }
     }
 
+    // Subscribe
+    const unsubscribe = NetInfo.addEventListener(state => {
+        console.log("Connection type", state.type);
+        console.log("Is connected?", state.isConnected);
+    });
+
+    // Check if user is offline or online using NetInfo
+    NetInfo.fetch().then(connection => {
+        if (connection.isConnected) {
+            setIsConnected(true);
+            console.log("Online");
+        } else {
+            setIsConnected(false);
+            console.log("Offline");
+        }
+    });
+
     useEffect(() => {
         // Signing in as Anonymous user
         signInAnon(auth);
@@ -67,27 +86,25 @@ export default function Chat(props) {
         props.navigation.setOptions({ title: name });
 
         // Create variable to hold unsubsriber
-        let unsubscribe;
+        //let unsubscribe;
 
-        // Check if user is offline or online using NetInfo
-        NetInfo.fetch().then(connection => {
-            if (connection.isConnected) {
-                setIsConnected(true);
-            } else {
-                setIsConnected(false);
-            }
-        });
+        // Unsubscribe
+        unsubscribe();
 
         // If user is online, retrieve messages from firebase store, if offline use AsyncStorage
         if (isConnected) {
             // Create a query to the messages collection, retrieving all messages sorted by their date of creation
             const messagesQuery = query(messagesRef, orderBy("createdAt", "desc"));
 
+            // Create variable to hold unsubsriber
+            let unsubscribe;
+
             // onSnapshot returns an unsubscriber, listening for updates to the messages collection
             unsubscribe = onSnapshot(messagesQuery, onCollectionUpdate);
 
             // Delete previously saved messages in asyncStorage
-            //deleteMessages();
+            deleteMessages();
+
             // Save messages to asyncStorage
             saveMessages();
 
@@ -98,7 +115,7 @@ export default function Chat(props) {
             // Load messages from asyncStorage
             getMessages();
         }
-    }, [isConnected]);
+    }, []);
 
 
     // save last messages(state) to the Firestore messages collection
@@ -159,7 +176,6 @@ export default function Chat(props) {
         }
     }
 
-
     return (
         // Setting the background color to the color picked by the user in the start screen
         <View
@@ -173,7 +189,7 @@ export default function Chat(props) {
                 onSend={messages => onSend(messages)}
                 // pull uid from auth data object and name from start.js/start screen - then add to message
                 user={{
-                    _id: auth.currentUser.uid,
+                    _id: auth.currentUser?.uid,
                     name: name,
                     avatar: 'https://placeimg.com/140/140/any'
                 }}

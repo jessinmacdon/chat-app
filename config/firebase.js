@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth, signInAnonymously } from "firebase/auth";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
 import Constants from "expo-constants";
 
@@ -27,11 +27,22 @@ export const auth = getAuth();
 export const signInAnon = (auth) => {
     signInAnonymously(auth)
         .then(() => {
-            console.log("YES")
+            console.log("logged in", auth)
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(error)
         });
+
+    // onAuthStateChanged(auth, (user) => {
+    //     if (user) {
+    //         // User is signed in, see docs for a list of available properties
+    //         // https://firebase.google.com/docs/reference/js/firebase.User
+    //         const uid = user.uid;
+    //         // ...
+    //     } else {
+    //         // User is signed out
+    //     }
+    // });
 }
