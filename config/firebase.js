@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signInAnonymously } from "firebase/auth";
 
 // Firebase config
 const firebaseConfig = {
@@ -33,15 +33,6 @@ export const signInAnon = (auth) => {
             console.log(error)
         });
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            // User is signed in, see docs for a list of available properties
-            const uid = user.uid;
-        } else {
-            // User is signed out
-            console.log("Logged Out")
-        }
-    });
 
 }
 
