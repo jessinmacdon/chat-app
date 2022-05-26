@@ -26,37 +26,47 @@ export default function Start(props) {
 
                 <View style={styles.box}>
 
-                    {/* add user name to screen - input */}
+                    {/* add user's name to screen - input */}
                     <TextInput
                         onChangeText={(name) => setName(name)}
                         value={name}
                         style={styles.input}
-                        placeholder='type your name'
+                        placeholder='Please enter your name'
                     />
 
                     {/* Allow users to choose their bgcolor */}
                     <Text style={styles.text}>Choose Background Color:</Text>
                     <View style={styles.colorContainer}>
                         <TouchableOpacity
+                            accessible={true}
+                            accessibilityRole="button"
                             style={[{ backgroundColor: colors.black }, styles.colorbutton]}
                             onPress={() => setColor(colors.black)}
                         />
                         <TouchableOpacity
+                            accessible={true}
+                            accessibilityRole="button"
                             style={[{ backgroundColor: colors.purple }, styles.colorbutton]}
                             onPress={() => setColor(colors.purple)}
                         />
                         <TouchableOpacity
+                            accessible={true}
+                            accessibilityRole="button"
                             style={[{ backgroundColor: colors.grey }, styles.colorbutton]}
                             onPress={() => setColor(colors.grey)}
                         />
                         <TouchableOpacity
+                            accessible={true}
+                            accessibilityRole="button"
                             style={[{ backgroundColor: colors.green }, styles.colorbutton]}
                             onPress={() => setColor(colors.green)}
                         />
                     </View>
 
-                    {/* Open chatroom - pass users name and bgcolor of choice */}
+                    {/* Open chatroom - pass users name and bgcolor of choice as props*/}
                     <Pressable
+                        accessible={true}
+                        accessibilityRole="button"
                         onPress={() => props.navigation.navigate('Chat', { name: name, color: color })}
                         style={({ pressed }) => [
                             {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
-import { StyleSheet, View, Platform, KeyboardAvoidingView, Text } from 'react-native';
-
+import { StyleSheet, View, Platform, KeyboardAvoidingView } from 'react-native';
+import "prop-types";
 import { collection, onSnapshot, addDoc, query, orderBy } from "firebase/firestore";
 
 import { auth, db, signInAnon } from '../config/firebase';
@@ -9,9 +9,9 @@ import { auth, db, signInAnon } from '../config/firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 
-//import { name as appName } from '../app.json';
+import CustomActions from './customActions';
+import MapView from 'react-native-maps';
 
-//AppRegistry.registerComponent(appName, () => App);
 
 export default function Chat(props) {
     // Retrieving the name and color properties passed from the Start Screen
@@ -31,7 +31,6 @@ export default function Chat(props) {
     const saveMessages = async () => {
         try {
             await AsyncStorage.setItem('messages', JSON.stringify(messages));
-            console.log('messages have been logged', messages)
         }
         catch (error) {
             console.log(error.message);
@@ -44,7 +43,6 @@ export default function Chat(props) {
         try {
             messages = await AsyncStorage.getItem('messages') || [];
             setMessages(JSON.parse(messages));
-            console.log('see your messages', messages)
         }
         catch (error) {
             console.log(error.message);
@@ -62,10 +60,7 @@ export default function Chat(props) {
     }
 
     // Subscribe
-    const unsubscribe = NetInfo.addEventListener(state => {
-        console.log("Connection type", state.type);
-        console.log("Is connected?", state.isConnected);
-    });
+    const unsubscribe = NetInfo.addEventListener(state => { });
 
     // Check if user is offline or online using NetInfo
     NetInfo.fetch().then(connection => {
@@ -84,9 +79,6 @@ export default function Chat(props) {
 
         // Set the screen title to the user name entered in the start screen
         props.navigation.setOptions({ title: name });
-
-        // Create variable to hold unsubsriber
-        //let unsubscribe;
 
         // Unsubscribe
         unsubscribe();
@@ -124,7 +116,9 @@ export default function Chat(props) {
             _id: message._id,
             text: message.text || '',
             createdAt: message.createdAt,
-            user: message.user
+            user: message.user,
+            image: message.image || "",
+            location: message.location || null,
         });
     }
 
@@ -142,7 +136,9 @@ export default function Chat(props) {
                 _id: doc.data()._id,
                 createdAt: doc.data().createdAt.toDate(),
                 text: doc.data().text,
-                user: doc.data().user
+                user: doc.data().user,
+                image: doc.data().image,
+                location: doc.data().location
             }))
         )
     }
@@ -176,6 +172,41 @@ export default function Chat(props) {
         }
     }
 
+    //render a map using style specifications, pass users current location (if the messageref contains location data)
+    const renderCustomView = (props) => {
+        const { currentMessage } = props;
+        const location = props.currentMessage.location;
+        if (props.currentMessage.location) {
+            return (
+                <View sytle={{ flex: 1, justifyContent: "center" }}>
+
+                    {location && (
+                        <MapView
+                            style={{
+                                width: 150,
+                                height: 100,
+                                borderRadius: 13,
+                                margin: 3
+                            }}
+                            region={{
+                                latitude: currentMessage.location.latitude,
+                                longitude: currentMessage.location.longitude,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421,
+                            }}
+                        />
+                    )}
+                </View>
+            );
+        }
+        return null;
+    }
+
+    // Render the CustomActions component next to input bar to let user send images and geolocation
+    const renderCustomActions = (props) => {
+        return <CustomActions {...props} />;
+    };
+
     return (
         // Setting the background color to the color picked by the user in the start screen
         <View
@@ -184,6 +215,8 @@ export default function Chat(props) {
             <GiftedChat
                 renderBubble={renderBubble.bind()}
                 renderInputToolbar={renderInputToolbar.bind()}
+                renderActions={renderCustomActions}
+                renderCustomView={renderCustomView}
                 messages={messages}
                 showAvatarForEveryMessage={true}
                 onSend={messages => onSend(messages)}

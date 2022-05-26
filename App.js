@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { StyleSheet, /*View, Text, TextInput, Button, Alert, ScrollView*/ } from 'react-native';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 
 // screens imports
 import Start from './components/start';
@@ -12,7 +12,7 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-// Navigator
+// Navigator - for interscreen navigation namely the start and chat screens
 const Stack = createStackNavigator();
 
 export default class App extends React.Component {
