@@ -163,7 +163,6 @@ Store and retrieve state from Async Storage
 ---
 
 ![How your chat room will look like!](/assets/chat.js.jpeg "Chat Screen")
-<br>
 ---
-<br>
+
 ![How your chat room will look like!](/assets/chat.js1.jpeg "Chat Screen")
