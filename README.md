@@ -58,7 +58,7 @@ There is a new Firestore version v9 available which differs greatly from v7 used
 ---
 ### Development Process for the chat application
 
-- Set up Expo as Development Environment
+- Set up Expo as Development Environment<br>
 **Install Expo Command Line Interface**
 ```
 npm install expo-cli --global
@@ -85,7 +85,7 @@ npm install react-navigation
 npm install @react-navigation/native @react-navigation/stack
 ```
 ```
-xpo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
 ```
 
 ---
@@ -93,8 +93,10 @@ xpo install react-native-reanimated react-native-gesture-handler react-native-sc
 - Download Android Studio
 - Make sure 'Android Virtual Device' is installed
 - Add Android SDK Location to ~/.zshrc file
-- export ANDROID_SDK=/Users/myuser/Library/Android/sdk
-- export PATH=/Users/myuser/Library/Android/sdk/platform-tools:$PATH
+```
+export ANDROID_SDK=/Users/myuser/Library/Android/sdk
+export PATH=/Users/myuser/Library/Android/sdk/platform-tools:$PATH
+````
 - Create virtual device (via more actions > Virtual Device Manager) and click play to start
 - Select 'Run app on Android' in Expo to run app on virtual device
 - Press Command + Shift + R to start a screen recording.
@@ -125,8 +127,8 @@ npm install firebase
 
 ```
 //Import Firestore in application (e.g, in config/firebase.js or directly in your chat.js file)
-- import { initializeApp } from "firebase/app";
-- import { getFirestore } from "firebase/firestore";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 ```
 
 - Register App in Firebase settings
@@ -134,16 +136,16 @@ npm install firebase
 - Initialize app
 
 ```
-- *//Initialize Firebase*
-`*const app = initializeApp(firebaseConfig);*`
+//Initialize Firebase*
+const app = initializeApp(firebaseConfig);
 
-//*Initialize Cloud Firestore and get a reference to the service*
-*`const db = getFirestore(app);`*
+//Initialize Cloud Firestore and get a reference to the service
+const db = getFirestore(app);
+```
+- Set up anonymous authentication in firebase console
 
-- *Set up anonymous authentication in firebase console*
-````
 
---
+---
 - To set up Async Storage for offline functionalities
 - Install package
 ```
@@ -154,8 +156,10 @@ expo install @react-native-community/async-storage
 ```
 //Import AsyncStorage into app
 import AsyncStorage from '@react-native-community/async-storage';
-Store and retrieve state from Async Storage
 ```
+
+Store and retrieve state from Async Storage
+
 ---
 
 ![How your chat room will look like!](/assets/chat.js.jpeg "Chat Screen")
