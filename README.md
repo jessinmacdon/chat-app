@@ -89,24 +89,29 @@ expo init [project-name]
 - npm install react-native-gifted-chat
 - Integrate Gifted Chat into application
 - import { GiftedChat } from 'react-native-gifted-chat';
-- Follow instructions to set up chat: https://github.com/jessinmacdon/chat-app
 
 ---
+
+**Follow instructions to set up chat** 
+
+```
+https://github.com/jessinmacdon/chat-app
+```
 - Set up Cloud Firestore as data storage platform
 - Install Firestore via Firebase
 - npm install firebase
-- Import Firestore in application (e.g, in Chat.js)
+- Import Firestore in application (e.g, in `config/firebase.js`)
 - import { initializeApp } from "firebase/app";
 - import { getFirestore } from "firebase/firestore";
 - Register App in Firebase settings
 - Copy config code to application from Firebase
 - Initialize app
 
-*// Initialize Firebase*
-*const app = initializeApp(firebaseConfig);*
-*// Initialize Cloud Firestore and get a reference to the service*
-*const db = getFirestore(app);*
-*Set up anonymous authentication in firebase console*
+- *Initialize Firebase*
+- *const app = initializeApp(firebaseConfig);*
+- *Initialize Cloud Firestore and get a reference to the service*
+- *const db = getFirestore(app);*
+- *Set up anonymous authentication in firebase console*
 
 --
 - Set up Async Storage for offline functionalities
