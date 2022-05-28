@@ -1,5 +1,5 @@
 # CHAT APP
-<br>
+
 ![The first thing you will see upon opening the app!](/assets/start.js.jpeg "First/Start Screen")
 
 ---
