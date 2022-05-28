@@ -159,7 +159,7 @@ expo install @react-native-community/async-storage
 import AsyncStorage from '@react-native-community/async-storage';
 ```
 
-Store and retrieve state from Async Storage
+- Store and retrieve state from Async Storage
 
 ---
 
