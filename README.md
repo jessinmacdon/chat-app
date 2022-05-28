@@ -59,18 +59,34 @@ There is a new Firestore version v9 available which differs greatly from v7 used
 ### Development Process for the chat application
 
 - Set up Expo as Development Environment
-- Install Expo Command Line Interface
-- npm install expo-cli --global
+**Install Expo Command Line Interface**
+```
+npm install expo-cli --global
+```
+
 - Create new Expo project in projects directory
+```
 expo init [project-name]
+```
+
 - Start expo by navigating to project folder & running
-- npm start
+```
+npm start
+```
+
 - Install React Navigation library to navigate between screens
-- Navigate to project folder and run
-- npm install react-navigation
-- Install necessary dependencies
-- npm install @react-navigation/native @react-navigation/stack
-- xpo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+**Navigate to project folder and run**
+```
+npm install react-navigation
+```
+
+**Install necessary dependencies***
+```
+npm install @react-navigation/native @react-navigation/stack
+```
+```
+xpo install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+```
 
 ---
 - Set up Android Studio as Android Emulator
@@ -81,14 +97,18 @@ expo init [project-name]
 - export PATH=/Users/myuser/Library/Android/sdk/platform-tools:$PATH
 - Create virtual device (via more actions > Virtual Device Manager) and click play to start
 - Select 'Run app on Android' in Expo to run app on virtual device
+- Press Command + Shift + R to start a screen recording.
 
 ---
-- Press Command + Shift + R to start a screen recording.
 - Integrate Gifted Chat library to create chat UI
-- Install Gifted Chat
-- npm install react-native-gifted-chat
-- Integrate Gifted Chat into application
-- import { GiftedChat } from 'react-native-gifted-chat';
+```
+//Install Gifted Chat
+npm install react-native-gifted-chat
+```
+```
+//Integrate Gifted Chat into application
+import { GiftedChat } from 'react-native-gifted-chat';
+```
 
 ---
 
@@ -99,27 +119,44 @@ https://github.com/jessinmacdon/chat-app
 ```
 - Set up Cloud Firestore as data storage platform
 - Install Firestore via Firebase
-- npm install firebase
-- Import Firestore in application (e.g, in `config/firebase.js`)
+```
+npm install firebase
+````
+
+```
+//Import Firestore in application (e.g, in config/firebase.js or directly in your chat.js file)
 - import { initializeApp } from "firebase/app";
 - import { getFirestore } from "firebase/firestore";
+```
+
 - Register App in Firebase settings
 - Copy config code to application from Firebase
 - Initialize app
 
-- *Initialize Firebase*
-- *const app = initializeApp(firebaseConfig);*
-- *Initialize Cloud Firestore and get a reference to the service*
-- *const db = getFirestore(app);*
+```
+- *//Initialize Firebase*
+`*const app = initializeApp(firebaseConfig);*`
+
+//*Initialize Cloud Firestore and get a reference to the service*
+*`const db = getFirestore(app);`*
+
 - *Set up anonymous authentication in firebase console*
+````
 
 --
-- Set up Async Storage for offline functionalities
+- To set up Async Storage for offline functionalities
 - Install package
-- expo install @react-native-community/async-storage
-- Import AsyncStorage into app
-- import AsyncStorage from '@react-native-community/async-storage';
-- Store and retrieve state from Async Storage
+```
+expo install @react-native-community/async-storage
+```
+---
+
+```
+//Import AsyncStorage into app
+import AsyncStorage from '@react-native-community/async-storage';
+Store and retrieve state from Async Storage
+```
+---
 
 ![How your chat room will look like!](/assets/chat.js.jpeg "Chat Screen")
 
