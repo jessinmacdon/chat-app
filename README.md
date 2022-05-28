@@ -1,7 +1,8 @@
+# CHAT APP
+<br>
 ![The first thing you will see upon opening the app!](/assets/start.js.jpeg "First/Start Screen")
 
-# CHAT APP
-
+---
 ## Built with React Native
 
 **The goal of this project was to learn and put react native skills to practise, building a chat app. The app provides users with a simple interface that enables users to send and receive texts messages, images and share their location within a chat room.**
@@ -19,13 +20,13 @@
 ---
 ### Key Features
 
-1. ***-  screen:***
+1. ***-  screen:***<br>
 This is the page the user lands on (the first page the user will see) when they open the app. The user would have to enter their Name and pick a background colour of their choice. The users name will be display on the top of the next screen.
 
-2. ***Chat screen***
+2. ***Chat screen***<br>
 Once the user clicks start chatting on the start screen, they will be navigated to the chat screen. This is the chat room, where they would be able to send texts, pictures, and location.
 
-3. ***Access to previous chats while offline***
+3. ***Access to previous chats while offline***<br>
 The app stores your messages and files (images/location) both online and offline. This means users would be able to access their chat history (previous chats) without being connected to the internet. However, they wouldn't see and text input field since the app doesn't allow users to text while in offline mode.
 
 ---
@@ -74,7 +75,7 @@ expo init [project-name]
 npm start
 ```
 
-- Install React Navigation library to navigate between screens
+- Install React Navigation library to navigate between screens<br>
 **Navigate to project folder and run**
 ```
 npm install react-navigation
